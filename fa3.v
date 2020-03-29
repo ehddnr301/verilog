@@ -11,8 +11,8 @@ module full_adder (
     and( w1, a, b );
     and( w2, a, cin );
     and( w3, b, cin );
-    or( cout, w1, w2, w3 );
+    or( count, w1, w2, w3 );
 
-    xor( s, a, b, cin );
+    xor( sum, a, b, cin );
 
 endmodule

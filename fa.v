@@ -1,4 +1,4 @@
-module full_adder1(a,b,cin,count,sum);
+module full_adder(a,b,cin,count,sum);
 
 input a,b,cin;
 output count,sum;
