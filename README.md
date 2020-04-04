@@ -235,4 +235,101 @@ En X2 X1 X0 | D7 D6 D5 D4 D3 D2 D1 D0
 1  1  1   1 | 1  0  0  0  0  0  0  0
 ```
 
--
+
+# Encoder
+
+- Produce a binary code equivalent to the input, which is actice High
+  - `2^n input` to `n-bit code`
+
+```
+          Input             Output
+ D7 D6 D5 D4 D3 D2 D1 D0 | X2 X1 X0 
+ 0  0  0  0  0  0  0  1  | 0  0   0 
+ 0  0  0  0  0  0  1  0  | 0  0   1 
+ 0  0  0  0  0  1  0  0  | 0  1   0 
+ 0  0  0  0  1  0  0  0  | 0  1   1 
+ 0  0  0  1  0  0  0  0  | 1  0   0 
+ 0  0  1  0  0  0  0  0  | 1  0   1 
+ 0  1  0  0  0  0  0  0  | 1  1   0 
+ 1  0  0  0  0  0  0  0  | 1  1   1 
+```
+
+- 진리표는 2^8개의 조합중에서 8개만 커버하고있다.
+- 나머지 248개의 경우에는 어떻게 출력될지 모른다.
+
+# Priority Encoder
+
+- 여러개의 입력이 들어오면 highest order를 씀.
+- 우선순위가 높은 코드값을 사용해서 출력을 보냄.
+- valid bit
+  - 1 : 000 D0가 high
+  - 0 : 000 어떤값도 high가 아님
+
+# 합성
+
+- verilog -> 회로
+- for문은 verilog -> 회로 가 구현되지않음.
+- testbench에서만 사용해야함.
+
+# $display
+
+- system task
+- printf 와 동일
+
+# Multiplexer
+```
+  Selection lines   Output
+    S1    S0      |   Y
+    0     0       |   I0
+    0     1       |   I1
+    1     0       |   I2
+    1     1       |   I3
+```
+
+- Maximum of 2^n data inputs, n selection lines and single ouput
+- 4 * 1 Multiplexer
+  - 2 bit selection 라인 필요
+- 여러개의 입력중 하나의 입력을 선택해서 동작
+
+# Demultiplexer
+
+```
+  Selection lines   Output
+    S1    S0      |   Y3 Y2 Y1 Y0
+    0     0       |   0  0  0  I
+    0     1       |   0  0  I  0
+    1     0       |   0  I  0  0
+    1     1       |   I  0  0  0
+```
+- I 는 input
+
+- 하나의 입력을 가지고 여러개의 로직중 어디로 출력을 내보낼지 결정하는 로직
+- single input
+- n selection lines
+- maximum 2^n outputs
+
+# Driving LED
+
+- Sink current : Vcc -> registor -> LED -> FPGA
+- Source current : FPGA -> LED -> registor -> GND
+
+- LED 특성 : 전류가 흐르지 않으면 양단의 전압차가 거의 무한대에 가까워짐
+  - 전류가 흐르면 일정한 전압차 발생
+
+# 7 segment
+
+- common cathode 타입을 사용함.
+
+- table
+```
+Number | Segment | DP | G | F | E | D | C | B | A | Hex value
+  0    |   0     |  0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0x3f
+  1    |   1     |  0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0x06
+  2    |   2     |  0 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 0x5b
+  3    |   3     |  0 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 0x4f
+  4    |   4     |  0 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0x66
+  5    |   5     |  0 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | 0x6d
+  6    |   6     |  0 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 0x7d
+  7    |   7     |  0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 0x07
+  8    |   8     |  0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0x7f
+  9    |   9     |  0 | 1 | 1 | 0 | 1 | 1 | 1 | 1 | 0x6f
