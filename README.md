@@ -174,3 +174,65 @@ target <= expr;
 - d <= #5 1;
 
 - 총 7이 걸림.
+
+## Combinational logic
+
+### Decoder
+
+- n개의 2진정보를 받아서 총 2^n개의 아웃풋을 만들어낸다.
+
+```
+ Input             Output
+X2 X1 X0 | D7 D6 D5 D4 D3 D2 D1 D0
+0  0   0 | 0  0  0  0  0  0  0  1 
+0  0   1 | 0  0  0  0  0  0  1  0
+0  1   0 | 0  0  0  0  0  1  0  0
+0  1   1 | 0  0  0  0  1  0  0  0
+1  0   0 | 0  0  0  1  0  0  0  0
+1  0   1 | 0  0  1  0  0  0  0  0
+1  1   0 | 0  1  0  0  0  0  0  0
+1  1   1 | 1  0  0  0  0  0  0  0
+```
+
+- Boolean equation for each output
+  - D7 = X2X1X0
+  - D6 = X2X1X0'
+  - D5 = X2X1'X0
+  - D4 = X2X1'X0'
+  - D3 = X2'X1X0
+  - D2 = X2'X1X0'
+  - D1 = X2'X1'X0
+  - D0 = X2'X1'X0'
+
+- [Decoder예제](./decoder.v)
+  - `x[2] x[1] x[0] 는 [2:0] x 랑 똑같다 `;
+  - combinational logic 에서는 blocking사용
+    - 위에서부터 하나하나 순차적으로 이루어짐.
+- [Decoder_Testbench](./tb_decoder.v)
+  - procedure내에서 사용할것이기때문에 변수형태 reg
+  - t_d는 decoder로직의 출력을 받아서 보는거기때문에 wire
+  - `$finish`
+    - $ : system task 미리 만들어진 것임
+    - 시뮬레이션을 진행하다가 finish를 만나면 시뮬레이션을 종료하게됨
+
+- Data Validity concern
+  - internal signal always has 0 or 1 value
+  - use Enable signal
+    - Enable signal이 1일경우에만 decodere신호를 보냄
+
+- Improved decoder
+```
+ Input             Output
+En X2 X1 X0 | D7 D6 D5 D4 D3 D2 D1 D0
+0  x  x   x | 0  0  0  0  0  0  0  0
+1  0  0   0 | 0  0  0  0  0  0  0  1 
+1  0  0   1 | 0  0  0  0  0  0  1  0
+1  0  1   0 | 0  0  0  0  0  1  0  0
+1  0  1   1 | 0  0  0  0  1  0  0  0
+1  1  0   0 | 0  0  0  1  0  0  0  0
+1  1  0   1 | 0  0  1  0  0  0  0  0
+1  1  1   0 | 0  1  0  0  0  0  0  0
+1  1  1   1 | 1  0  0  0  0  0  0  0
+```
+
+-
