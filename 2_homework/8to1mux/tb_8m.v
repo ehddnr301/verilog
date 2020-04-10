@@ -1,5 +1,5 @@
 
-module tb_mux_eight;
+module tb_mux_eight();
 
 
  reg [2:0] t_s;
@@ -13,8 +13,6 @@ module tb_mux_eight;
  reg t_I7;
 
  wire [7:0] t_result;
-
- reg [2:0] count = 3'd0;
 
  integer i;
 

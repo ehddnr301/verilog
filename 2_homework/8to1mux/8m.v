@@ -16,8 +16,8 @@ input [2:0] s;
 output [7:0] result;
 
 wire I0, I1, I2, I3, I4, I5, I6, I7;
-wire s;
-reg result;
+wire [2:0] s;
+reg [7:0] result;
 
 always @(*) begin
 case (s)
