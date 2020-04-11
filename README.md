@@ -238,7 +238,7 @@ En X2 X1 X0 | D7 D6 D5 D4 D3 D2 D1 D0
 
 # Encoder
 
-- Produce a binary code equivalent to the input, which is actice High
+- Produce a binary code equivalent to the input, which is active High
   - `2^n input` to `n-bit code`
 
 ```
