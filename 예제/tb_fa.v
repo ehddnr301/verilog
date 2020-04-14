@@ -4,9 +4,9 @@ reg a;
 reg b;
 reg cin;
 wire sum;
-wire count;
+wire cout;
 
-full_adder f1 ( .a(a), .b(b), .cin(cin), .sum(sum), .count(count));
+full_adder f1 ( .a(a), .b(b), .cin(cin), .sum(sum), .cout(cout));
 initial 
 begin
 $dumpfile("testbench.vcd"); $dumpvars; 
