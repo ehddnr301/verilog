@@ -35,14 +35,7 @@ $dumpfile("testbench.vcd"); $dumpvars;
 
   // Wait 100 ns for global reset to finish
 
-  #100;
-
-  for(i=0;i<16; i=i+1) begin
-    #10 A = A + 4'b0001;
-  end
-
-
-  // Add stimulus here
+  #20;
 
   A    = 4'b1011;
   B    = 4'b0100;
@@ -50,9 +43,11 @@ $dumpfile("testbench.vcd"); $dumpvars;
 
   #20;
 
-  A    = 4'b1111;
+  A    = 4'b0111;
   B    = 4'b1101;
   Cin  = 4'b1;
+
+  #20 $finish ;
 
  end
 
