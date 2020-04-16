@@ -31,21 +31,33 @@ $dumpfile("testbench.vcd"); $dumpvars;
 
   A    = 4'b0;
   B    = 4'b0;
-  Cin  = 4'b0;
+  Cin  = 0;
 
   // Wait 100 ns for global reset to finish
 
   #20;
 
-  A    = 4'b1011;
-  B    = 4'b0100;
-  Cin  = 4'b0;
+  A    = 4'b1111;
+  B    = 4'b1111;
+  Cin  = 0;
+
+  #20;
+
+  A    = 4'b0000;
+  B    = 4'b1111;
+  Cin  = 1;
+
+  #20;
+
+  A    = 4'b0100;
+  B    = 4'b1011;
+  Cin  = 0;
 
   #20;
 
   A    = 4'b0111;
-  B    = 4'b1101;
-  Cin  = 4'b1;
+  B    = 4'b1100;
+  Cin  = 1;
 
   #20 $finish ;
 
