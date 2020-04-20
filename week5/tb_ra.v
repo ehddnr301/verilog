@@ -12,7 +12,6 @@ module Adder4bit_tb;
  wire [3:0] Sum;
  wire Cout;
 
- integer i;
 
  // Instantiate the Unit Under Test (UUT)
 
@@ -40,6 +39,7 @@ $dumpfile("testbench.vcd"); $dumpvars;
   A    = 4'b1111;
   B    = 4'b1111;
   Cin  = 0;
+  
 
   #20;
 

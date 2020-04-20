@@ -28,6 +28,11 @@ $dumpfile("testbench.vcd"); $dumpvars;
       tb_k=0;
       tb_a=8'b10000000;
       tb_b=8'b11001000;
+  #10
+
+    tb_a = 0;
+  tb_b = 0;
+  tb_k = 0;
 
   #10 
       tb_k=1;

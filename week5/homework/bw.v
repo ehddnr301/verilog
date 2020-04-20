@@ -4,13 +4,10 @@ module bitwise(
     result
 );
 
-input [7:0] a;
-input [7:0] b;
-output [7:0] result;
-
-wire result;
+input wire [7:0] a;
+input wire [7:0] b;
+output wire [7:0] result;
 
 assign result = a ^ b;
-
 
 endmodule // bitwise
