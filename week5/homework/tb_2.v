@@ -1,14 +1,14 @@
 module tb_adder_subtractor_8bits;
 
-reg [7:0] tb_a;
-reg [7:0] tb_b;
+parameter TB_WIDTH = 8;
 
+reg [TB_WIDTH - 1:0] tb_a;
+reg [TB_WIDTH - 1:0] tb_b;
 reg tb_k;
-
 wire [7:0] tb_sum;
 wire tb_cout;
 
-adder_subtractor_8bits as8 (
+adder_subtractor_8bits #( .WIDTH ( TB_WIDTH )) as0 (
     .a(tb_a),
     .b(tb_b),
     .k(tb_k),
@@ -28,11 +28,6 @@ $dumpfile("testbench.vcd"); $dumpvars;
       tb_k=0;
       tb_a=8'b10000000;
       tb_b=8'b11001000;
-  #10
-
-    tb_a = 0;
-  tb_b = 0;
-  tb_k = 0;
 
   #10 
       tb_k=1;

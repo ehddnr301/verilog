@@ -21,7 +21,7 @@ assign exOrB[3] = B[3]^Cin;
 assign exOrB[2] = B[2]^Cin;
 assign exOrB[1] = B[1]^Cin;
 assign exOrB[0] = B[0]^Cin;
-assign Cout = transferC[3];
+assign Cout = transferC[3] ^ Cin;
 
 full_adder1 FA1 ( .In1(A[3]),
                 .In2(exOrB[3]),

@@ -1,10 +1,16 @@
 module adder_subtractor_8bits(
-    input [7:0] a,
-    input [7:0] b,
+    input [WIDTH-1:0] a,
+    input [WIDTH-1:0] b,
     input k,
     output reg cout,
     output reg [7:0] sum
 );
+
+
+
+parameter WIDTH = 8;
+
+
 
 always @(*) begin
 

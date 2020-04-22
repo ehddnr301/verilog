@@ -1,21 +1,18 @@
 
-module Adder4bit_tb;
+module tb_Adder4bit;
 
- // Inputs
 
  reg [3:0] A;
  reg [3:0] B;
  reg Cin;
 
- // Outputs
 
  wire [3:0] Sum;
  wire Cout;
 
 
- // Instantiate the Unit Under Test (UUT)
 
- Adder4bit uut (  .A(A), 
+ Adder4bit a (  .A(A), 
                  .B(B), 
                  .Cin(Cin), 
                  .Sum(Sum), 
@@ -26,13 +23,11 @@ module Adder4bit_tb;
 $dumpfile("testbench.vcd"); $dumpvars; 
 
 
-  // Initialize Inputs
 
   A    = 4'b0;
   B    = 4'b0;
   Cin  = 0;
 
-  // Wait 100 ns for global reset to finish
 
   #20;
 
