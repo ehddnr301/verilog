@@ -13,37 +13,60 @@ BCD_a_FND baf (
     .seg0(tb_seg0)
 );
 
+integer i;
+integer j;
+
 initial begin
 $dumpfile("testbench.vcd"); $dumpvars; 
+#10;
 
 tb_a = 4'b0;
 tb_b = 4'b0;
 
-#20;
+for (i=0;i<16;i=i+1) begin
+    #5 tb_a=tb_a+1;
+        for (j=0;j<15;j=j+1) begin
+            #5 tb_b=tb_b+1;
+        end
+end
 
-tb_a = 4'b0001;
-tb_b = 4'b0001;
 
-#20;
+// #30;
 
-tb_a = 4'b0100;
-tb_b = 4'b0100;
+// tb_a = 4'b0001;
+// tb_b = 4'b0001;
+// tb_a = 4'b1000;
+// tb_b = 4'b0111;
 
-#20;
+// #30;
 
-tb_a = 4'b1000;
-tb_b = 4'b1111;
+// tb_a = 4'b0100;
+// tb_b = 4'b0100;
+// tb_a = 4'b1000;
+// tb_b = 4'b0110;
 
-#20;
+// #30;
 
-tb_a = 4'b1000;
-tb_b = 4'b1000;
+// tb_a = 4'b1000;
+// tb_b = 4'b1111;
+// tb_a = 4'b1000;
+// tb_b = 4'b0101;
 
-#20;
+// #30;
 
-tb_a = 4'b1111;
-tb_b = 4'b1000;
+// tb_a = 4'b1000;
+// tb_b = 4'b1000;
+// tb_a = 4'b1000;
+// tb_b = 4'b0011;
 
+// #30;
+
+// tb_a = 4'b1111;
+// tb_b = 4'b1000;
+// tb_a = 4'b1000;
+// tb_b = 4'b0001;
+
+// #30;
   
 end
 
