@@ -23,12 +23,17 @@ $dumpfile("testbench.vcd"); $dumpvars;
 tb_a = 4'b0;
 tb_b = 4'b0;
 
-for (i=0;i<16;i=i+1) begin
-    #5 tb_a=tb_a+1;
+for (i=0;i<15;i=i+1) begin
+    tb_b = 4'b0;
+    tb_a=tb_a+1;
         for (j=0;j<15;j=j+1) begin
             #5 tb_b=tb_b+1;
         end
+
+    #20;
 end
+
+$finish();
 
 
 // #30;
