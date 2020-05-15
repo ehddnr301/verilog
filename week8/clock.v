@@ -11,7 +11,7 @@ always @(posedge clk or posedge reset) begin
         counter <= 0;
     end
     else
-        counter <= q+1;
+        counter <= counter+1;
         if(counter == 12500000) begin
             counter <= 0;
             clk1hz <= ~clk1hz;
