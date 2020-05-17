@@ -9,7 +9,7 @@ module dynamic_display(
 reg [24:0] count;
 reg [3:0] counter;
 
-// 25Mhz 에서 1khz 생성
+// 25Mhz 에서 1khz 생성합니다.
 always @(posedge clk or posedge nRst) begin
     if(nRst == 0)begin
         count <= 25'd0;
@@ -17,6 +17,7 @@ always @(posedge clk or posedge nRst) begin
     end
     else if (count == 25'd25000)begin
         count<= 25'd0;
+        // counter를 0 1 2 3 0 1 2 3 순으로 반복시킵니다.
         if(counter <4) counter <= counter + 1;
         else counter <= 0;
     end
@@ -33,15 +34,15 @@ always @(counter) begin
     seg_sel = 4'b0111;
     end
     4'b0001 : begin
-    seg_dat = 8'b11111110;
+    seg_dat = 8'b10111010;
     seg_sel = 4'b1011;
     end
     4'b0010 : begin
-    seg_dat = 8'b11111110;
+    seg_dat = 8'b10111010;
     seg_sel = 4'b1101;
     end
     4'b0011 : begin
-    seg_dat = 8'b11111110;
+    seg_dat = 8'b01100010;
     seg_sel = 4'b1110;
     end
     default : begin
