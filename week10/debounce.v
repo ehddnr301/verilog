@@ -14,6 +14,7 @@ reg [N-1:0] q_next;
 reg DFF1, Dff2
 
 // control flags
+// counter++ 과 counter reset
 wire q_add;
 wire q_reset;
 
@@ -22,7 +23,8 @@ wire q_reset;
 assign q_reset = (DFF1^DFF2);
 
 // add to counter when q_reg msb is equl to 0
-assign q_add = ~(q_reg[N-1]);
+// 최상위 비트가 1이아니면 계속 증가하게
+assign q_add = ~(q_reg[N-1]); 
 
 // combinational logic to manage q_next
 always @(*) begin
@@ -30,6 +32,8 @@ always @(*) begin
     2'b00: q_next = q_reg;
     2'b01: q_next = q_reg +1;
     default: q_next = { N{1'b0}};
+    // default 는 10 or 11 = reset이 1인상황.
+    // counter를 0으로 초기화.
     endcase
 end
 

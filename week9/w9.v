@@ -26,6 +26,7 @@ always @(posedge clk or posedge nRst) begin
     end
 end
 
+
 // 순서대로 counter가 0,1,2,3 일때 sel가 가리키는곳을 다르게하고 값을 다르게 지정.
 always @(counter) begin
     case(counter)
