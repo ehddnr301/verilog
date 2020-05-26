@@ -11,7 +11,7 @@ reg [N-1:0] q_reg;
 reg [N-1:0] q_next;
 
 // input flip-flop
-reg DFF1, Dff2;
+reg DFF1, DFF2;
 
 // control flags
 // counter++ 과 counter reset
