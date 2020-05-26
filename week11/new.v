@@ -6,8 +6,8 @@ module switch_example(
     input nRst,
     input inc,
     input nxt,
-    output [7:0] seg_dat,
-    output [3:0] seg_sel
+    output wire [7:0] seg_dat,
+    output wire [3:0] seg_sel
 );
 // 스위치가 open이면 1
 // 스위치가 눌리면 0
@@ -25,16 +25,7 @@ reg [3:0] curr_val3, next_val3;
 
 reg [3:0] curr_sel, next_sel;
 
-dynamic_display dd0(
-    .clk (clk),
-    .nRst (nRst),
-    .curr_val(curr_val),
-    .curr_val1(curr_val1),
-    .curr_val2(curr_val2),
-    .curr_val3(curr_val3),
-    .seg_dat(seg_dat),
-    .seg_sel(seg_sel)
-);
+
 
 debounce db0( 
     .clk (clk),
@@ -49,7 +40,17 @@ debounce db1(
     .DB_out (nxt_reg)
 );
 
-assign seg_sel = 4'b0000;
+dynamic_display dd0(
+    .clk (clk),
+    .nRst (nRst),
+    .curr_val(curr_val),
+    .curr_val1(curr_val1),
+    .curr_val2(curr_val2),
+    .curr_val3(curr_val3),
+    .seg_dat(seg_dat),
+    .seg_sel(seg_sel)
+);
+
 assign inc_falling = ~inc_reg && inc_reg2;
 assign nxt_falling = ~nxt_reg && nxt_reg2;
 // 이전신호가 1이고 현재신호가 0이면 ~을해서 1이되니까 and를 취하면 이게 falling이 발생했다라는 의미
@@ -71,6 +72,7 @@ curr_val <= #1 next_val;
 curr_val1 <= #1 next_val1;
 curr_val2 <= #1 next_val2;
 curr_val3 <= #1 next_val3;
+
 curr_sel <= #1 next_sel;
 inc_reg2 <= #1 inc_reg;
 nxt_reg2 <= #1 nxt_reg;
@@ -86,24 +88,31 @@ always @(*) begin
 
 if (inc_falling) begin
 
-if (curr_sel == 1) begin
+if (curr_sel == 0) begin
 next_val = curr_val + 1;
 if (next_val >= 4'hA) next_val = 4'h0;
 end
 
-if (curr_sel == 2) begin
+else if (curr_sel == 1) begin
 next_val1 = curr_val1 + 1;
 if (next_val1 >= 4'hA) next_val1 = 4'h0;
 end
 
-if (curr_sel == 3) begin
+else if (curr_sel == 2) begin
 next_val2 = curr_val2 + 1;
 if (next_val2 >= 4'hA) next_val2 = 4'h0;
 end
 
-if (curr_sel == 4) begin
+else if (curr_sel == 3) begin
 next_val3 = curr_val3 + 1;
 if (next_val3 >= 4'hA) next_val3 = 4'h0;
+end
+
+else begin
+next_val = 0;
+next_val1 = 0;
+next_val2 = 0;
+next_val3 = 0;
 end
 
 end
@@ -123,12 +132,18 @@ always @(*) begin
 
 if (nxt_falling) begin
 next_sel = curr_sel + 1;
-if (next_sel >= 4'h5)
+if (next_sel >= 4'h4)
 next_sel = 4'h0;
 end
 
 else next_sel = curr_sel;
 
 end
+
+
+// 이런식으로 합쳐보기.
+// always @(curr_val) begin
+    
+// end
 
 endmodule // switch_example

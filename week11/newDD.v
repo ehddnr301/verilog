@@ -12,7 +12,6 @@ module dynamic_display(
 
 
 reg [3:0] control = 0;
-reg clk1khz = 0;
 reg clk10hz = 0;
 reg [24:0] counter = 0;
 
@@ -21,20 +20,6 @@ wire [7:0] seg_dat1;
 wire [7:0] seg_dat2;
 wire [7:0] seg_dat3;
 
-// 25mhz 에서 1khz를 만들기위해 구간을 반으로 나눠서 clk1khz를 1 0 1 0 .... 으로 되게 하기 위한 코드입니다.
-always@( posedge clk or posedge nRst) begin
-    if (nRst == 0) begin
-        clk1khz <= 0;
-        counter <= 0;
-    end
-    else begin
-        counter <= counter + 1;
-        if ( counter == 12500 ) begin
-            counter <= 0;
-            clk1khz <= ~clk1khz;
-        end
-    end
-end
 always@( posedge clk or posedge nRst) begin
     if (nRst == 0) begin
         clk10hz <= 0;
@@ -42,7 +27,7 @@ always@( posedge clk or posedge nRst) begin
     end
     else begin
         counter <= counter + 1;
-        if ( counter == 1250000 ) begin
+        if ( counter == 124999 ) begin
             counter <= 0;
             clk10hz <= ~clk10hz;
         end
@@ -82,23 +67,25 @@ always @(control) begin
     case(control)
     4'b0000 : begin
     seg_dat = seg_dat0;
-    seg_sel = 4'b0111;
+    seg_sel = 4'b1000;
     end
     4'b0001 : begin
     seg_dat = seg_dat1;
-    seg_sel = 4'b1011;
+    seg_sel = 4'b0100;
     end
     4'b0010 : begin
     seg_dat = seg_dat2;
-    seg_sel = 4'b1101;
+    seg_sel = 4'b0010;
     end
     4'b0011 : begin
     seg_dat = seg_dat3;
-    seg_sel = 4'b1110;
+    seg_sel = 4'b0001;
     end
     default : begin
-    seg_dat = 8'b11111110;
-    seg_sel = 4'b1111;
+    seg_dat = 8'b10000000;
+    seg_sel = 4'b1000;
+    // 이걸로 리셋 누르면 어디에 불이오는지 확인해보기.
+    // 서브모듈 안쓰고 만들어보자.
     end
     endcase
 end
