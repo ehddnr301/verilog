@@ -120,6 +120,7 @@ next_val1 = curr_val1;
 next_val2 = curr_val2;
 if (next_val3 >= 4'hA) next_val3 = 4'h0;
 end
+// TODO : a.v 추가해놓은거 보면 <= 이렇게 쓰면 값에 도달할때 까지 계속 하는건가.
 
 // incControl inside
 end
