@@ -23,7 +23,8 @@ reg [3:0] curr_val3, next_val3;
 reg inc_reg2;
 reg nxt_reg2;
 
-reg [2:0] modeControl = 3'b000;
+reg [2:0] currModeControl = 3'b000;
+reg [2:0] nextModeControl = 3'b000;
 
 bcd_to_7seg seg0( 
     .sin(curr_val0),
@@ -66,12 +67,14 @@ curr_val2 <= #1 4'h0;
 curr_val3 <= #1 4'h0;
 inc_reg2 <= #1 1'b0;
 nxt_reg2 <= #1 1'b0;
+currModeControl <= #1 3'b000;
 end 
 else begin
 curr_val0 <= #1 next_val0;
 curr_val1 <= #1 next_val1;
 curr_val2 <= #1 next_val2;
 curr_val3 <= #1 next_val3;
+currModeControl <= #1 nextModeControl;
 inc_reg2 <= #1 inc_reg;
 nxt_reg2 <= #1 nxt_reg;
 // 리셋이 아니면 reg신호를 reg2에 넣음. debounce된 신호를 1사이클 동안 d플립플롭을 거치게만드는효과.
@@ -86,38 +89,27 @@ always @(*) begin
 if (inc_falling) begin
 // incControl inside
 
-if(modeControl == 3'b000)begin
+if(currModeControl == 3'b000)begin
 next_val0 = curr_val0 + 1;
 if (next_val0 >= 4'hA) next_val0 = 4'h0;
 end
 
-if(modeControl == 3'b001)begin
+else if(currModeControl == 3'b001)begin
 next_val0 = curr_val0 - 1;
 if (next_val0 <= 4'h0) next_val0 = 4'h9;
 end
 
-if(modeControl == 3'b010)begin
+else if(currModeControl == 3'b010)begin
 next_val0 = curr_val0 + 2;
 if (next_val0 >= 4'hA) next_val0 = 4'h0;
 end
 
-if(modeControl == 3'b011)begin
+else if(currModeControl == 3'b011)begin
 next_val0 = curr_val0 - 2;
 if (next_val0 <= 4'h0) next_val0 = 4'h9;
 end
 
 // incControl inside
-end
-
-
-// next control
-else if (nxt_falling) begin
-// nxtControl inside
-
-modeControl = modeControl + 1;
-if(modeControl >= 3'b100) modeControl = 3'b000;
-
-// nxtControl inside
 end
 
 else begin
@@ -126,6 +118,23 @@ next_val1 = curr_val1;
 next_val2 = curr_val2;
 next_val3 = curr_val3;
 end
+
+end
+
+always @(*) begin
+    
+    // next control
+    if (nxt_falling) begin
+    // nxtControl inside
+
+    nextModeControl = currModeControl + 1;
+    if(nextModeControl >= 3'b100) nextModeControl = 3'b000;
+
+    // nxtControl inside
+    end
+    else begin
+    nextModeControl = currModeControl;
+    end
 
 end
 
