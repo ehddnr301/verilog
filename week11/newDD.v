@@ -67,19 +67,19 @@ always @(control) begin
     case(control)
     4'b0000 : begin
     seg_dat = seg_dat0;
-    seg_sel = 4'b1000;
+    seg_sel = 4'b0111;
     end
     4'b0001 : begin
     seg_dat = seg_dat1;
-    seg_sel = 4'b0100;
+    seg_sel = 4'b1011;
     end
     4'b0010 : begin
     seg_dat = seg_dat2;
-    seg_sel = 4'b0010;
+    seg_sel = 4'b1101;
     end
     4'b0011 : begin
     seg_dat = seg_dat3;
-    seg_sel = 4'b0001;
+    seg_sel = 4'b1110;
     end
     default : begin
     seg_dat = 8'b10000000;
@@ -87,7 +87,7 @@ always @(control) begin
     end
     endcase
 end
-
+// 1이 꺼지고 0 이 켜짐
     
 
 
