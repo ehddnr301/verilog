@@ -2,7 +2,7 @@
 module dynamic_display(
     input clk,
     input nRst,
-    input [3:0] curr_val,
+    input [3:0] curr_val0,
     input [3:0] curr_val1,
     input [3:0] curr_val2,
     input [3:0] curr_val3,
@@ -46,7 +46,7 @@ always@( posedge clk10hz or posedge nRst) begin
 end
 
 bcd_to_7seg seg0( 
-    .sin(curr_val),
+    .sin(curr_val0),
     .seg(seg_dat0)
 );
 bcd_to_7seg seg1( 
@@ -83,9 +83,7 @@ always @(control) begin
     end
     default : begin
     seg_dat = 8'b10000000;
-    seg_sel = 4'b1000;
-    // 이걸로 리셋 누르면 어디에 불이오는지 확인해보기.
-    // 서브모듈 안쓰고 만들어보자.
+    seg_sel = 4'b1111;
     end
     endcase
 end
