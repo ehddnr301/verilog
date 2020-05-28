@@ -6,7 +6,6 @@ module dynamic_display(
     input [3:0] curr_val1,
     input [3:0] curr_val2,
     input [3:0] curr_val3,
-    // TODO : 여기서 currModeControl 값을 받아서 4이면 계속 돌게 ?
     output reg [7:0] seg_dat,
     output reg [3:0] seg_sel
 );
@@ -28,11 +27,9 @@ always@( posedge clk or posedge nRst) begin
     end
     else begin
         counter <= counter + 1;
-        if ( counter == 124999 ) begin
+        if ( counter == 12499 ) begin
             counter <= 0;
             clk10hz <= ~clk10hz;
-            // TODO: 여기서 countdown 구현 ??
-            
         end
     end
 end

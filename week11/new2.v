@@ -12,6 +12,27 @@ module switch_example(
 // 스위치가 open이면 1
 // 스위치가 눌리면 0
 
+// clk making
+reg [24:0] counter = 0;
+wire timerClk;
+
+always@( posedge clk or posedge nRst) begin
+    if (nRst == 0) begin
+        counter <= 0;
+    end
+    else if(counter == 2500000)begin
+        counter <= 0;
+    end
+    else begin
+        counter <= counter + 1;
+    end
+end
+
+assign timerClk = ((counter == 2500000) ? 1'b1 : 1'b0);
+
+
+// clk making
+
 wire inc_reg, inc_falling;
 wire nxt_reg, nxt_falling;
 // inc_reg 가 chattering이 제거된 신호.
@@ -85,6 +106,60 @@ end
 
 always @(*) begin
 
+
+if (nextModeControl >= 3'b100) begin
+// timer
+if(timerClk) begin
+    // 3
+    if(next_val3 == 0)begin
+        next_val3 <= 0;
+        // 2
+            if(next_val2 == 0)begin
+                next_val2 <= 0;
+                // 1
+                    if(next_val1 == 0)begin
+                        next_val1 <= 0;
+                        // 0
+                            if(next_val0 == 0)begin
+                                next_val0 <= 0;
+                            end
+                            else begin
+                                next_val0 <= curr_val0 - 1;
+                            end
+                        // 0
+                        // next_val0 <= curr_val0;
+                    end
+                    else begin
+                        next_val1 <= curr_val1 - 1;
+                        next_val0 <= curr_val0;
+                    end
+                // 1
+                // next_val1 <= curr_val1;
+                // next_val0 <= curr_val0;
+            end
+            else begin
+                next_val2 <= curr_val2 - 1;
+                next_val1 <= curr_val1;
+                next_val0 <= curr_val0;
+            end
+        // 2
+        // next_val1 <= curr_val1;
+        // next_val0 <= curr_val0;
+    end
+    else begin
+        next_val3 <= curr_val3 - 1;
+        next_val2 <= curr_val2;
+        next_val1 <= curr_val1;
+        next_val0 <= curr_val0;
+    end
+    // 3
+    
+    
+    
+end
+// timer
+end
+
 // inc control
 if (inc_falling) begin
 // incControl inside
@@ -124,7 +199,6 @@ end
 
 // incControl inside
 end
-
 else begin
 next_val0 = curr_val0;
 next_val1 = curr_val1;
@@ -141,8 +215,20 @@ always @(*) begin
     // nxtControl inside
 
     nextModeControl = currModeControl + 1;
-    if(nextModeControl >= 3'b100) nextModeControl = 3'b000;
+    if(nextModeControl >= 3'b100) begin
+    // timer making
+    
 
+    // after timer Control go 000
+    if(next_val3 == 0 && next_val2 == 0 && next_val1 == 0 && next_val0 == 0)begin
+     nextModeControl = 3'b000;
+    end
+    // after timer Control go 000
+
+    // timer making
+    end
+
+    // TODO : 여기서 value control 해보자.
     // nxtControl inside
     end
     else begin
