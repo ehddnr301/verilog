@@ -111,27 +111,31 @@ if (nextModeControl >= 3'b100) begin
 // timer
 if(timerClk) begin
     // 3
-    if(next_val3 == 0)begin
+    if(curr_val3 == 0)begin
         next_val3 <= 0;
         // 2
-            if(next_val2 == 0)begin
+            if(curr_val2 == 0)begin
                 next_val2 <= 0;
                 // 1
-                    if(next_val1 == 0)begin
+                    if(curr_val1 == 0)begin
                         next_val1 <= 0;
                         // 0
-                            if(next_val0 == 0)begin
+                            if(curr_val0 == 0)begin
                                 next_val0 <= 0;
                             end
                             else begin
                                 next_val0 <= curr_val0 - 1;
+                                next_val1 <= 9;
+                                next_val2 <= 9;
+                                next_val3 <= 9;
                             end
                         // 0
                         // next_val0 <= curr_val0;
                     end
                     else begin
                         next_val1 <= curr_val1 - 1;
-                        next_val0 <= curr_val0;
+                        next_val2 <= 9;
+                        next_val3 <= 9;
                     end
                 // 1
                 // next_val1 <= curr_val1;
@@ -139,8 +143,7 @@ if(timerClk) begin
             end
             else begin
                 next_val2 <= curr_val2 - 1;
-                next_val1 <= curr_val1;
-                next_val0 <= curr_val0;
+                next_val3 <= 9;
             end
         // 2
         // next_val1 <= curr_val1;
