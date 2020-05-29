@@ -13,8 +13,27 @@ module switch_example(
 // 스위치가 눌리면 0
 
 // clk making
+
+// 1khz clock
+reg clk1khz;
+always@( posedge clk or posedge nRst) begin
+    if (nRst == 0) begin
+        clk1khz <= 0;
+        counter <= 0;
+    end
+    else begin
+        counter <= counter + 1;
+        if ( counter == 12499 ) begin
+            counter <= 0;
+            clk1khz <= ~clk1khz;
+        end
+    end
+end
+
 reg [24:0] counter = 0;
 wire timerClk;
+
+// TODO : 1khz 만들어서 그걸로 timerClk를 만들까.
 
 always@( posedge clk or posedge nRst) begin
     if (nRst == 0) begin
@@ -47,13 +66,11 @@ reg nxt_reg2;
 reg [2:0] currModeControl = 3'b000;
 reg [2:0] nextModeControl = 3'b000;
 
-// bcd_to_7seg seg0( 
-//     .sin(curr_val0),
-//     .seg(seg_dat)
-// );
+// TODO : dd 에 넘겨줄때 currModeControl 도 넘겨줘서 리셋 제어 ?
 dynamic_display dd0(
     .clk (clk),
     .nRst (nRst),
+    .currModeControl(currModeControl),
     .curr_val0(curr_val0),
     .curr_val1(curr_val1),
     .curr_val2(curr_val2),
@@ -82,13 +99,16 @@ assign nxt_falling = ~nxt_reg && nxt_reg2;
 always @(posedge clk) begin
 
 if (~nRst) begin
-curr_val0 <= #1 4'h0;
-curr_val1 <= #1 4'h0;
-curr_val2 <= #1 4'h0;
-curr_val3 <= #1 4'h0;
-inc_reg2 <= #1 1'b0;
-nxt_reg2 <= #1 1'b0;
-currModeControl <= #1 3'b000;
+    // TODO : 여기서 currModeControl 값 에 따라서 할지 안할지 정해주면 될듯 ?
+if(currModeControl < 3'b100) begin
+    curr_val0 <= #1 4'h0;
+    curr_val1 <= #1 4'h0;
+    curr_val2 <= #1 4'h0;
+    curr_val3 <= #1 4'h0;
+    inc_reg2 <= #1 1'b0;
+    nxt_reg2 <= #1 1'b0;
+    currModeControl <= #1 3'b000;
+end
 end 
 else begin
 curr_val0 <= #1 next_val0;
@@ -212,28 +232,27 @@ end
 end
 
 always @(*) begin
-    
+    if(currModeControl >= 3'b100) begin
+
+    if(next_val3 == 0 && next_val2 == 0 && next_val1 == 0 && next_val0 == 0)begin
+     nextModeControl <= 3'b000;
+    end else begin
+     nextModeControl <= 3'b100;
+    end
+
+    end
+
     // next control
     if (nxt_falling) begin
     // nxtControl inside
 
     nextModeControl = currModeControl + 1;
-    if(nextModeControl >= 3'b100) begin
-    // timer making
     
-
-    // after timer Control go 000
-    if(next_val3 == 0 && next_val2 == 0 && next_val1 == 0 && next_val0 == 0)begin
-     nextModeControl = 3'b000;
-    end
-    // after timer Control go 000
-
-    // timer making
-    end
 
     // TODO : 여기서 value control 해보자.
     // nxtControl inside
     end
+
     else begin
     nextModeControl = currModeControl;
     end

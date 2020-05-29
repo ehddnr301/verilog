@@ -6,6 +6,7 @@ module dynamic_display(
     input [3:0] curr_val1,
     input [3:0] curr_val2,
     input [3:0] curr_val3,
+    input [2:0] currModeControl,
     output reg [7:0] seg_dat,
     output reg [3:0] seg_sel
 );
@@ -20,30 +21,36 @@ wire [7:0] seg_dat1;
 wire [7:0] seg_dat2;
 wire [7:0] seg_dat3;
 
+
+// 0.1초 간격으로 깜빡이는 clk 50 duty
 always@( posedge clk or posedge nRst) begin
     if (nRst == 0) begin
+        if(currModeControl <= 3) begin
         clk10hz <= 0;
         counter <= 0;
-    end
-    else begin
-        counter <= counter + 1;
-        if ( counter == 12499 ) begin
-            counter <= 0;
-            clk10hz <= ~clk10hz;
         end
     end
-end
+        else begin
+            counter <= counter + 1;
+            if ( counter == 156250 ) begin
+                counter <= 0;
+                clk10hz <= ~clk10hz;
+            end
+        end
+    end
 
 // 생성한 신호에 따라 seg값을 넣습니다.
 always@( posedge clk10hz or posedge nRst) begin
-   if(nRst == 0) begin
+    if(nRst == 0) begin
+        if(currModeControl <= 3) begin
         control <= 4'b1111;
+        end
     end
-   else begin
-       if(control <4) control <= control+1;
-       else control <= 0;
+    else begin
+        if(control <4) control <= control+1;
+        else control <= 0;
+        end
     end
-end
 
 bcd_to_7seg seg0( 
     .sin(curr_val0),
