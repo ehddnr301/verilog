@@ -1,7 +1,7 @@
 `include "debounce.v"
 `include "newDD.v"
 
-module switch_example(
+module miniProject(
     input clk,
     input nRst,
     input inc,
@@ -14,27 +14,10 @@ module switch_example(
 
 // clk making
 
-// 1khz clock
-reg clk1khz;
-always@( posedge clk or posedge nRst) begin
-    if (nRst == 0) begin
-        clk1khz <= 0;
-        counter <= 0;
-    end
-    else begin
-        counter <= counter + 1;
-        if ( counter == 12499 ) begin
-            counter <= 0;
-            clk1khz <= ~clk1khz;
-        end
-    end
-end
-
 reg [24:0] counter = 0;
 wire timerClk;
 
-// TODO : 1khz 만들어서 그걸로 timerClk를 만들까.
-
+// 0.1초마다 감소를 위한 신호생성.
 always@( posedge clk or posedge nRst) begin
     if (nRst == 0) begin
         counter <= 0;
@@ -66,7 +49,7 @@ reg nxt_reg2;
 reg [2:0] currModeControl = 3'b000;
 reg [2:0] nextModeControl = 3'b000;
 
-// TODO : dd 에 넘겨줄때 currModeControl 도 넘겨줘서 리셋 제어 ?
+// display 에 넘겨줄때 currModeControl 도 넘겨줘서 리셋을 제어합니다.
 dynamic_display dd0(
     .clk (clk),
     .nRst (nRst),
@@ -97,9 +80,8 @@ assign nxt_falling = ~nxt_reg && nxt_reg2;
 
 
 always @(posedge clk) begin
-
+// 리셋버튼을 카운트다운 도중에는 사용하지 않습니다.
 if (~nRst) begin
-    // TODO : 여기서 currModeControl 값 에 따라서 할지 안할지 정해주면 될듯 ?
 if(currModeControl < 3'b100) begin
     curr_val0 <= #1 4'h0;
     curr_val1 <= #1 4'h0;
@@ -126,22 +108,22 @@ end
 
 always @(*) begin
 
-
+// countdown 입니다.
 if (nextModeControl >= 3'b100) begin
-// timer
+// countdown
 if(timerClk) begin
     // 3
     if(curr_val3 == 0)begin
-        next_val3 <= 0;
+        next_val3 <= curr_val3;
         // 2
             if(curr_val2 == 0)begin
-                next_val2 <= 0;
+                next_val2 <= curr_val2;
                 // 1
                     if(curr_val1 == 0)begin
-                        next_val1 <= 0;
+                        next_val1 <= curr_val1;
                         // 0
                             if(curr_val0 == 0)begin
-                                next_val0 <= 0;
+                                next_val0 <= curr_val0;
                             end
                             else begin
                                 next_val0 <= curr_val0 - 1;
@@ -150,7 +132,6 @@ if(timerClk) begin
                                 next_val3 <= 9;
                             end
                         // 0
-                        // next_val0 <= curr_val0;
                     end
                     else begin
                         next_val1 <= curr_val1 - 1;
@@ -158,16 +139,12 @@ if(timerClk) begin
                         next_val3 <= 9;
                     end
                 // 1
-                // next_val1 <= curr_val1;
-                // next_val0 <= curr_val0;
             end
             else begin
                 next_val2 <= curr_val2 - 1;
                 next_val3 <= 9;
             end
         // 2
-        // next_val1 <= curr_val1;
-        // next_val0 <= curr_val0;
     end
     else begin
         next_val3 <= curr_val3 - 1;
@@ -180,10 +157,10 @@ if(timerClk) begin
     
     
 end
-// timer
+// countdown
 end
 
-// inc control
+// inc버튼 control
 if (inc_falling) begin
 // incControl inside
 
@@ -222,6 +199,8 @@ end
 
 // incControl inside
 end
+
+// inc 버튼이 눌러지지 않을 경우 입니다.
 else begin
 next_val0 = curr_val0;
 next_val1 = curr_val1;
@@ -232,9 +211,10 @@ end
 end
 
 always @(*) begin
+    // count down 이 시작된 경우 0000 이 되지않으면 계속 count down 합니다.
     if(currModeControl >= 3'b100) begin
 
-    if(next_val3 == 0 && next_val2 == 0 && next_val1 == 0 && next_val0 == 0)begin
+    if(curr_val3 == 0 && curr_val2 == 0 && curr_val1 == 0 && curr_val0 == 0)begin
      nextModeControl <= 3'b000;
     end else begin
      nextModeControl <= 3'b100;
@@ -242,15 +222,11 @@ always @(*) begin
 
     end
 
-    // next control
+    // next 버튼 control
     if (nxt_falling) begin
-    // nxtControl inside
 
     nextModeControl = currModeControl + 1;
-    
 
-    // TODO : 여기서 value control 해보자.
-    // nxtControl inside
     end
 
     else begin
@@ -259,4 +235,4 @@ always @(*) begin
 
 end
 
-endmodule // switch_example
+endmodule // miniProject

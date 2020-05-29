@@ -39,7 +39,7 @@ always@( posedge clk or posedge nRst) begin
         end
     end
 
-// 생성한 신호에 따라 seg값을 넣습니다.
+// 생성한 신호에 따라 display될 위치를 조정합니다.
 always@( posedge clk10hz or posedge nRst) begin
     if(nRst == 0) begin
         if(currModeControl <= 3) begin
@@ -52,6 +52,7 @@ always@( posedge clk10hz or posedge nRst) begin
         end
     end
 
+// segment신호로 바꿔줍니다.
 bcd_to_7seg seg0( 
     .sin(curr_val0),
     .seg(seg_dat0)
@@ -69,7 +70,7 @@ bcd_to_7seg seg3(
     .seg(seg_dat3)
 );
 
-// 순서대로 counter가 0,1,2,3 일때 sel가 가리키는곳을 다르게하고 값을 다르게 지정.
+// 순서대로 control이 0,1,2,3 일때 sel가 가리키는곳을 다르게하고 값을 다르게 지정합니다.
 always @(control) begin
     case(control)
     4'b0000 : begin
@@ -94,7 +95,6 @@ always @(control) begin
     end
     endcase
 end
-// 1이 꺼지고 0 이 켜짐
     
 
 
